@@ -4621,6 +4621,74 @@ section.why-flashcab-section .premium-about-desc {
   line-height: 1.65;
 }
 
+.salient-features-list {
+  list-style-type: decimal;
+  padding-left: 2rem;
+  margin: 0;
+}
+
+.salient-features-list li {
+  margin-bottom: 0.75rem;
+}
+
+.salient-features-list li:last-child {
+  margin-bottom: 0;
+}
+
+.standard-packing-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.standard-packing-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.standard-packing-label {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.standard-packing-value {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.technical-data-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.technical-data-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.technical-data-label {
+  color: #64748b;
+  font-weight: 600;
+  flex-shrink: 0;
+  margin-right: 1.5rem;
+}
+
+.technical-data-value {
+  color: #1e293b;
+  font-weight: 700;
+  text-align: right;
+}
+
+
 .detail-section-card.spec-table {
   margin-top: 48px !important;
   padding: 24px !important;

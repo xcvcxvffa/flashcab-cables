@@ -327,7 +327,7 @@ const Products = () => {
                   Salient Features
                 </div>
                 <div className="cable-spec-card-body">
-                  <ol className="list-decimal pl-5 space-y-2">
+                  <ol className="salient-features-list">
                     {specs.salientFeatures.map((feat, idx) => (
                       <li key={idx}>{feat}</li>
                     ))}
@@ -342,11 +342,11 @@ const Products = () => {
                 <div className="cable-spec-card-header">
                   Technical Data
                 </div>
-                <div className="cable-spec-card-body space-y-2.5">
+                <div className="cable-spec-card-body">
                   {Object.entries(specs.technicalData).map(([key, value]) => (
-                    <div key={key} className="flex justify-between items-center border-b border-slate-100 pb-2 last:border-0 last:pb-0">
-                      <span className="text-slate-500 font-semibold">{key}</span>
-                      <span className="text-slate-800 font-bold">{value}</span>
+                    <div key={key} className="technical-data-item">
+                      <span className="technical-data-label">{key}</span>
+                      <span className="technical-data-value">{value}</span>
                     </div>
                   ))}
                 </div>
@@ -362,11 +362,11 @@ const Products = () => {
                 <div className="cable-spec-card-header">
                   Standard Packing
                 </div>
-                <div className="cable-spec-card-body space-y-2.5">
+                <div className="cable-spec-card-body">
                   {Object.entries(specs.standardPacking).map(([key, value]) => (
-                    <div key={key} className="flex flex-col gap-1 border-b border-slate-100 pb-2 last:border-0 last:pb-0">
-                      <span className="text-slate-500 font-semibold">{key}</span>
-                      <span className="text-slate-800 font-bold">{value}</span>
+                    <div key={key} className="standard-packing-item">
+                      <span className="standard-packing-label">{key}</span>
+                      <span className="standard-packing-value">{value}</span>
                     </div>
                   ))}
                 </div>
