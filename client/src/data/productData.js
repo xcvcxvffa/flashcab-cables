@@ -38,7 +38,7 @@ export const productCategories = [
         <div>
           <p class="font-semibold text-gray-700 mb-4 text-[18px]">Earthing Cables Specifications</p>
           <div class="premium-table-container">
-            <table class="premium-spec-table w-full min-w-[800px]">
+            <table class="dark-spec-table w-full min-w-[800px]">
               <thead>
                 <tr>
                   <th rowspan="2">Wire Size</th>
