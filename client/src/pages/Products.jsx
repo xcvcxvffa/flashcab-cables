@@ -460,7 +460,7 @@ const Products = () => {
               <span className="table-heading-bar"></span>
               <h3 className="table-heading-text">Application of MVCC</h3>
             </div>
-            <div className="overflow-x-auto spec-html-container">
+            <div className="p-6 md:p-8">
               <div dangerouslySetInnerHTML={{ __html: displayProduct.applicationHtml }} />
             </div>
           </div>
