@@ -3,7 +3,12 @@ export const productCategories = [
     id: 'earthing-cables',
     name: 'Earthing Cables',
     description: 'This cable can be used in panels, cabinets, machines Earthing, internal wirings with switchgears, relays, controllers, equipment’s, controls units, etc.',
-    image: '/assets/images/Product_Image/earthing-cable.png',
+    image: '/assets/images/Product_Image/EARTHING WIRE.png',
+    image2: '/assets/images/Product_Image/EARTHING WIRE VRTICAL.png',
+    imgList: [
+      { img: '/assets/images/Product_Image/EARTHING WIRE.png' },
+      { img: '/assets/images/Product_Image/EARTHING WIRE VRTICAL.png' }
+    ],
     subCategories: [],
     specs: {
       cableStandard: 'Generally conforms to IS 694:2010, IEC60227, BS 6004',
