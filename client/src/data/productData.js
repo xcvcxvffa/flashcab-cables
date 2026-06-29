@@ -171,7 +171,7 @@ export const productCategories = [
         'Low smoke emission'
       ],
       technicalData: {
-        'Electrical Characteristics': '',
+        '<span class="font-bold text-gray-800 text-[15px]">Electrical Characteristics</span>': '',
         'Rated Voltage': '0.6/1 kV AC',
         'Rated DC Voltage': '1.5 kV',
         'Maximum Permitted DC Voltage': '1.8 kV (conductor/conductor,non earthen system, circuit not under load)',

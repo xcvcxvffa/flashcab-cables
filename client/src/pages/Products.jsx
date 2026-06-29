@@ -366,8 +366,8 @@ const Products = () => {
                   ) : (
                     Object.entries(specs.technicalData).map(([key, value]) => (
                       <div key={key} className="technical-data-item">
-                        <span className="technical-data-label">{key}</span>
-                        <span className="technical-data-value">{value}</span>
+                        <span className="technical-data-label" dangerouslySetInnerHTML={{ __html: key }} />
+                        {value && <span className="technical-data-value" dangerouslySetInnerHTML={{ __html: value }} />}
                       </div>
                     ))
                   )}
