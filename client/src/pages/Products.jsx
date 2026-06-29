@@ -46,7 +46,7 @@ const mapStaticProduct = (prod) => {
     specs: prod.specs || {},
     technicalDetails: technicalDetails,
     features: features,
-    specificationHtml: tableHtml,
+    specificationHtml: tableHtml || prod.specs?.specificationHtml || '',
     specificationTable: prod.specs?.specificationTable || null,
     tableNotes: prod.specs?.tableNotes || [],
     subCategories: prod.subCategories || []
