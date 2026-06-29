@@ -12,19 +12,35 @@ const placeholderSvg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/
 const leaders = [
   {
     id: 1,
-    name: 'Name',
-    role: 'Founder',
-    image: placeholderSvg,
-    linkedin: 'https://linkedin.com', // Icon added
-    description: "Built on strong values and deep industry expertise, our founders laid the foundation of the company with a clear vision of quality, precision, and long-term growth. Their dedication, leadership, and commitment to excellence continue to drive our success and shape the future of our organization."
+    name: 'Gopalbhai Shingala',
+    role: 'Chairman',
+    image: '/assets/images/Team/Gopalbhai_Shingala.png',
+    linkedin: '#', // Icon added
+    description: ""
   },
   {
     id: 2,
-    name: 'Name',
+    name: 'Vijay Shingala',
     role: 'Managing Director',
-    image: placeholderSvg,
-    linkedin: 'https://linkedin.com',
-    description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\\n\\nIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
+    image: '/assets/images/Team/Vijay_Shingala.png',
+    linkedin: 'https://www.linkedin.com/in/vijay-shingala-6580b8241/',
+    description: ""
+  },
+  {
+    id: 3,
+    name: 'Ravi Vadodariya',
+    role: 'Director',
+    image: '/assets/images/Team/Ravi_Vadodariya.png',
+    linkedin: '#',
+    description: ""
+  },
+  {
+    id: 4,
+    name: 'Dhaval Vadodariya',
+    role: 'Chief Executive Officer',
+    image: '/assets/images/Team/Dhaval_Vadodariya.png',
+    linkedin: 'https://www.linkedin.com/in/dhaval-vadodariya-a0b323417/',
+    description: ""
   }
 ];
 
@@ -89,45 +105,33 @@ const Leadership = () => {
   return (
     <section ref={containerRef} className="leadership-section">
       <div className="container mx-auto px-6 lg:px-8 max-w-[1400px]">
-        <div className="leadership-grid">
-          
-          {/* Left: Cards */}
-          <div className="leadership-cards-wrapper">
-            {leaders.map((leader) => (
-              <div 
-                key={leader.id} 
-                className="leader-card" 
-                onClick={() => setSelectedLeader(leader)}
-              >
-                <div className="leader-image-box">
-                  <img src={leader.image} alt={leader.name} />
-                </div>
-                <div className="leader-info">
-                  <h4 className="leader-name">{leader.name}</h4>
-                  <p className="leader-role">{leader.role}</p>
-                  <div className="leader-social-placeholder">
-                    {leader.linkedin && (
-                      <a href={leader.linkedin} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-                        <i className="fa-brands fa-linkedin-in linkedin-icon text-[18px]"></i>
-                      </a>
-                    )}
-                  </div>
-                </div>
+        {/* Top: Text Content */}
+        <div className="container text-center mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+          <span className="impact-eyebrow inline-block mb-6 md:mb-8">OUR LEADERSHIP</span>
+          <h2 className="global-section-heading">
+            Leadership That Built the Foundation
+          </h2>
+          <p className="global-section-desc leadership-desc">
+            Our company was founded with a vision of quality, trust, and growth. The dedication and leadership of our founders continue to guide our success today.          </p>
+        </div>
+
+        {/* Bottom: Cards */}
+        <div className="flex flex-wrap justify-center gap-8">
+          {leaders.map((leader) => (
+            <div
+              key={leader.id}
+              className="leader-card"
+              onClick={() => setSelectedLeader(leader)}
+            >
+              <div className="leader-image-box">
+                <img src={leader.image} alt={leader.name} />
               </div>
-            ))}
-          </div>
-
-          {/* Right: Text Content */}
-          <div className="leadership-text-wrapper text-left">
-            <span className="impact-eyebrow inline-block mb-6 md:mb-8">OUR LEADERSHIP</span>
-            <h2 className="global-section-heading" style={{ margin: 0, textAlign: 'left' }}>
-              Leadership That Built the Foundation
-            </h2>
-            <p className="leadership-desc text-slate-500 text-[16px] leading-relaxed max-w-xl mt-6">
-              Built on strong values and deep industry expertise, our founders laid the foundation of the company with a clear vision of quality, precision, and long-term growth. Their dedication, leadership, and commitment to excellence continue to drive our success and shape the future of our organization.
-            </p>
-          </div>
-
+              <div className="leader-info">
+                <h4 className="leader-name">{leader.name}</h4>
+                <p className="leader-role">{leader.role}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -145,18 +149,14 @@ const Leadership = () => {
               <div className="leader-modal-info">
                 <h3 className="leader-modal-name">{selectedLeader.name}</h3>
                 <p className="leader-modal-role">{selectedLeader.role}</p>
-                
+
                 <div className="leader-modal-desc">
                   {selectedLeader.description.split('\n\n').map((paragraph, idx) => (
                     <p key={idx}>{paragraph}</p>
                   ))}
                 </div>
 
-                {selectedLeader.linkedin && (
-                  <a href={selectedLeader.linkedin} target="_blank" rel="noopener noreferrer" className="leader-modal-social">
-                    <i className="fa-brands fa-linkedin-in linkedin-icon text-[20px]"></i>
-                  </a>
-                )}
+
               </div>
             </div>
           </div>

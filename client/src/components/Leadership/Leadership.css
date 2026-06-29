@@ -75,7 +75,12 @@
 
 .leader-info {
   text-align: center;
-  padding-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding-bottom: 8px;
 }
 
 .leader-name {
@@ -83,20 +88,13 @@
   color: var(--secondary-color);
   font-size: 18px;
   font-weight: 600;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .leader-role {
   color: #94a3b8;
   font-size: 14px;
-  margin-bottom: 12px;
-}
-
-.leader-social-placeholder {
-  height: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-bottom: 0;
 }
 
 .linkedin-icon {

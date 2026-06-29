@@ -403,6 +403,24 @@ const Home = () => {
         <div ref={container}>
             {/* 1. Dark Hero Section */}
             <section className="dark-hero">
+                <video 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline 
+                    className="hero-background-video"
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        zIndex: 0
+                    }}
+                >
+                    <source src="/assets/Video/FlashCab_video.mp4" type="video/mp4" />
+                </video>
                 <div className="hero-content-wrapper hero-animate" style={{ textAlign: 'left', padding: '0 0 15px 25px', width: '100%' }}>
                     <h1 className="hero-title" style={{ fontSize: '6vw', lineHeight: 0.9, letterSpacing: '-0.04em', color: 'white', marginBottom: '5px', fontWeight: 800, fontFamily: 'var(--font-heading)' }}>
                         EMPOWERING<br />CONNECTIVITY

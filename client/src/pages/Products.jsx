@@ -10,27 +10,27 @@ import { productCategories } from '../data/productData';
 
 const mapStaticProduct = (prod) => {
   const technicalDetails = Object.entries(prod.specs?.technicalData || {}).map(([key, value]) => ({ label: key, value: String(value) }));
-  
+
   const features = [];
   if (prod.specs?.salientFeatures && prod.specs.salientFeatures.length > 0) {
     features.push({ title: 'Salient Features', description: `<ul class="list-disc pl-5">` + prod.specs.salientFeatures.map(f => `<li>${f}</li>`).join('') + `</ul>` });
   }
   if (prod.specs?.standardPacking) {
     const pkStr = Object.entries(prod.specs.standardPacking).map(([k, v]) => `<li><b>${k}:</b> ${v}</li>`).join('');
-    features.push({ title: 'Standard Packing', description: `<ul class="list-disc pl-5">${pkStr}</ul>` });
+    features.push({ title: 'Packing & Construction', description: `<ul class="list-disc pl-5">${pkStr}</ul>` });
   }
 
   let tableHtml = "";
   if (!prod.specs?.specificationTable && prod.specs?.tableData && prod.specs.tableData.length > 0) {
-     const headers = Object.keys(prod.specs.tableData[0]);
-     tableHtml = `<table style="border-collapse: collapse; width: 100%;" border="1"><thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>` + 
-                 prod.specs.tableData.map(row => `<tr>${headers.map(h => `<td>${row[h]}</td>`).join('')}</tr>`).join('') +
-                 `</tbody></table>`;
-     if (prod.specs?.tableNotes && prod.specs.tableNotes.length > 0) {
-       tableHtml += `<div class="table-notes mt-6 text-sm text-gray-500 font-medium space-y-1.5 border-t border-gray-100 pt-4">` + 
-                    prod.specs.tableNotes.map(n => `<p class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>${n}</p>`).join('') + 
-                    `</div>`;
-     }
+    const headers = Object.keys(prod.specs.tableData[0]);
+    tableHtml = `<table style="border-collapse: collapse; width: 100%;" border="1"><thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>` +
+      prod.specs.tableData.map(row => `<tr>${headers.map(h => `<td>${row[h]}</td>`).join('')}</tr>`).join('') +
+      `</tbody></table>`;
+    if (prod.specs?.tableNotes && prod.specs.tableNotes.length > 0) {
+      tableHtml += `<div class="table-notes mt-6 text-sm text-gray-500 font-medium space-y-1.5 border-t border-gray-100 pt-4">` +
+        prod.specs.tableNotes.map(n => `<p class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>${n}</p>`).join('') +
+        `</div>`;
+    }
   }
 
   return {
@@ -89,9 +89,11 @@ const Products = () => {
     fetch('/api/products')
       .then(res => res.json())
       .then(data => {
-        const fetchedProducts = data.data || [];
+        const rawFetchedProducts = data.data || [];
+        const validStaticIds = productCategories.map(p => p.id);
+        const fetchedProducts = rawFetchedProducts.filter(p => validStaticIds.includes(p.id) || validStaticIds.includes(p.slug));
         const fetchedSlugs = fetchedProducts.map(p => p.slug || p.id);
-        
+
         const mappedDbProducts = fetchedProducts.map(dbProd => {
           const staticProd = productCategories.find(p => p.id === dbProd.id || p.id === dbProd.slug);
           if (staticProd) {
@@ -112,16 +114,16 @@ const Products = () => {
             features: []
           };
         });
-        
+
         // Find static products that haven't been added to DB yet
         const staticFallbackProducts = productCategories
           .filter(p => !fetchedSlugs.includes(p.id))
           .map(mapStaticProduct);
-          
+
         const combinedProducts = [...mappedDbProducts, ...staticFallbackProducts];
-        
+
         setProducts(combinedProducts);
-        
+
         if (productId) {
           const found = combinedProducts.find(p => p.id === productId || p.slug === productId);
           setActiveProduct(found || null);
@@ -137,7 +139,7 @@ const Products = () => {
       })
       .catch(err => {
         console.error('Error fetching products:', err);
-        
+
         // On completely failed API, load all static products
         const allStatic = productCategories.map(mapStaticProduct);
         setProducts(allStatic);
@@ -266,42 +268,33 @@ const Products = () => {
         };
       }
     }
-    
+
     const specs = displayProduct.specs || {};
 
     return (
       <div className="product-details w-full animate-fade-in" ref={detailRef}>
-        {/* Title & Images Row */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-100 pb-5 mb-8 gap-4">
+        <div className="flex flex-col gap-4 border-b border-slate-100 pb-5 mb-8">
           <h2 className="text-3xl font-extrabold text-[#203a70] tracking-tight">{displayProduct.name}</h2>
-          
-          <div className="flex gap-4 items-center">
-            {/* Dynamic Core Color Graphic */}
-            {(() => {
-              const cores = getCoresPreview(displayProduct.name);
-              if (!cores) return null;
-              return (
-                <div className="border-2 border-black rounded-full px-2.5 py-1 bg-[#f8fafc] flex items-center gap-1.5 shadow-sm">
-                  {cores.map((c, i) => (
-                    <span 
-                      key={i} 
-                      className="w-5 h-5 rounded-full border border-black/80 shadow-sm" 
-                      style={{ backgroundColor: c }} 
-                    />
-                  ))}
-                </div>
-              );
-            })()}
 
-            {/* Cable Product Image Preview */}
-            {displayProduct.imgList && displayProduct.imgList[1]?.img && (
-              <img 
-                src={displayProduct.imgList[1].img} 
-                alt={displayProduct.name} 
-                className="product-detail-img mix-blend-multiply" 
+          {displayProduct.imgList && displayProduct.imgList.length > 0 && (
+            <div className="mt-2 flex justify-start">
+              <img
+                src={displayProduct.imgList[1]?.img || displayProduct.imgList[0]?.img}
+                alt={displayProduct.name}
+                className="max-h-[1500px] md:max-h-[800px] w-auto object-contain mix-blend-multiply"
               />
-            )}
-          </div>
+            </div>
+          )}
+
+          {/* Description Block */}
+          {specs.description && (
+            <div className="mt-4 text-gray-700 leading-relaxed text-[15px] space-y-4">
+              {Array.isArray(specs.description) 
+                ? specs.description.map((para, i) => <p key={i}>{para}</p>)
+                : <p>{specs.description}</p>
+              }
+            </div>
+          )}
         </div>
 
         {/* 2-Column Specs Layout */}
@@ -343,12 +336,41 @@ const Products = () => {
                   Technical Data
                 </div>
                 <div className="cable-spec-card-body">
-                  {Object.entries(specs.technicalData).map(([key, value]) => (
-                    <div key={key} className="technical-data-item">
-                      <span className="technical-data-label">{key}</span>
-                      <span className="technical-data-value">{value}</span>
+                  {Array.isArray(specs.technicalData) ? (
+                    <div className="flex flex-col pt-3">
+                      <h4 className="font-bold text-[#203a70] text-[16.5px] mb-3 tracking-wide">Electrical Characteristics</h4>
+                      <div className="flex flex-col">
+                        {specs.technicalData.map((item, idx) => {
+                          const splitIdx = item.indexOf(':');
+                          if (splitIdx > -1) {
+                            const label = item.substring(0, splitIdx).trim();
+                            const val = item.substring(splitIdx + 1).trim();
+                            return (
+                              <div key={idx} className="flex justify-between items-start !py-[18px] border-b border-gray-100 last:border-0">
+                                <span 
+                                  className="text-[#64748b] font-medium text-[15px] shrink-0" 
+                                  dangerouslySetInnerHTML={{ __html: label }} 
+                                />
+                                <span className="font-semibold text-[#1e293b] text-[15px] text-right flex-1 ml-8 leading-relaxed">{val}</span>
+                              </div>
+                            );
+                          }
+                          return (
+                            <div key={idx} className="py-[18px] border-b border-gray-100 last:border-0 text-[#64748b] text-[15px] leading-relaxed">
+                              {item}
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
-                  ))}
+                  ) : (
+                    Object.entries(specs.technicalData).map(([key, value]) => (
+                      <div key={key} className="technical-data-item">
+                        <span className="technical-data-label">{key}</span>
+                        <span className="technical-data-value">{value}</span>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             )}
@@ -356,12 +378,26 @@ const Products = () => {
 
           {/* Right Column */}
           <div className="space-y-6">
+            {/* Construction */}
+            {specs.construction && Object.keys(specs.construction).length > 0 && (
+              <div className="cable-spec-card">
+                <div className="cable-spec-card-header">
+                  Construction
+                </div>
+                <div className="cable-spec-card-body">
+                  {Object.entries(specs.construction).map(([key, value]) => (
+                    <div key={key} className="standard-packing-item">
+                      <span className="standard-packing-label">{key}</span>
+                      <span className="standard-packing-value">{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Standard Packing */}
             {specs.standardPacking && Object.keys(specs.standardPacking).length > 0 && (
               <div className="cable-spec-card">
-                <div className="cable-spec-card-header">
-                  Standard Packing
-                </div>
                 <div className="cable-spec-card-body">
                   {Object.entries(specs.standardPacking).map(([key, value]) => (
                     <div key={key} className="standard-packing-item">
@@ -392,7 +428,24 @@ const Products = () => {
                   Application
                 </div>
                 <div className="cable-spec-card-body leading-relaxed">
-                  {specs.application}
+                  {Array.isArray(specs.application) ? (
+                    <ul className="space-y-2 list-disc pl-5">
+                      {specs.application.map((app, idx) => (
+                        <li key={idx} className="text-[#64748b] text-[15px]">
+                          {typeof app === 'string' ? (
+                            <span className="text-[#203a70] font-medium">{app}</span>
+                          ) : (
+                            <>
+                              <strong className="text-[#203a70] block mb-1">{app.title}:</strong>
+                              {app.desc}
+                            </>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    specs.application
+                  )}
                 </div>
               </div>
             )}
@@ -506,177 +559,177 @@ const Products = () => {
     <>
       {showPreloader && <Preloader onComplete={() => setShowPreloader(false)} />}
       <div className="min-h-screen bg-white pt-24 pb-20">
-      {/* Dynamic Breadcrumb Section */}
-      <div 
-        className="breadcrumb-hero" 
-        style={{ 
-          backgroundImage: activeProduct && activeProduct.imgList && activeProduct.imgList.length > 2 && activeProduct.imgList[2]?.img
-            ? `url('${activeProduct.imgList[2].img}')` 
-            : `url('${pageSettings?.other_settings?.breadcrumb_image || '/assets/images/mega_cables.png'}')` 
-        }}
-      >
-        <h1 className="breadcrumb-title">
-          <span key={activeProduct ? activeProduct.id : 'cable'} className="split-heading">
-            {activeProduct ? activeProduct.name : 'Cable'}
-          </span>
-        </h1>
+        {/* Dynamic Breadcrumb Section */}
+        <div
+          className="breadcrumb-hero"
+          style={{
+            backgroundImage: activeProduct && activeProduct.imgList && activeProduct.imgList.length > 2 && activeProduct.imgList[2]?.img
+              ? `url('${activeProduct.imgList[2].img}')`
+              : `url('${pageSettings?.other_settings?.breadcrumb_image || '/assets/images/mega_cables.png'}')`
+          }}
+        >
+          <h1 className="breadcrumb-title">
+            <span key={activeProduct ? activeProduct.id : 'cable'} className="split-heading">
+              {activeProduct ? activeProduct.name : 'Cable'}
+            </span>
+          </h1>
 
-        {/* Breadcrumb Navigation */}
-        <div className="breadcrumb-nav">
-          <a href="/">Home</a>
-          <span className="separator">/</span>
+          {/* Breadcrumb Navigation */}
+          <div className="breadcrumb-nav">
+            <a href="/">Home</a>
+            <span className="separator">/</span>
 
-          {!activeProduct ? (
-            <span className="active-crumb">Cable</span>
+            {!activeProduct ? (
+              <span className="active-crumb">Cable</span>
+            ) : (
+              <>
+                <a href="#" onClick={(e) => { e.preventDefault(); setActiveProduct(null); navigate('/cable'); }}>Cable</a>
+                <span className="separator">/</span>
+                <span className="active-crumb">{activeProduct.name}</span>
+              </>
+            )}
+          </div>
+        </div>
+
+        <div className={`${activeProduct ? 'cable-detail-page-container' : 'cable-page-container'} flex flex-col gap-12 transition-all duration-500`}>
+          {activeProduct ? (
+            <div className="cable-detail-layout-grid">
+              {/* Left Sidebar */}
+              <aside className="cable-detail-sidebar">
+                <nav className="space-y-1">
+                  {products.map((prod) => {
+                    const isActive = activeProduct && (activeProduct.id === prod.id || activeProduct.slug === prod.id);
+                    const hasSub = prod.subCategories && prod.subCategories.length > 0;
+                    const isExpanded = expandedCategoryId === prod.id;
+
+                    return (
+                      <div key={prod.id} className="cable-sidebar-item-container">
+                        {hasSub ? (
+                          <button
+                            onClick={() => setExpandedCategoryId(prev => prev === prod.id ? null : prod.id)}
+                            className={`cable-sidebar-btn ${isActive ? 'cable-sidebar-btn-active' : ''}`}
+                          >
+                            <span>{prod.name}</span>
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => handleProductClick(prod)}
+                            className={`cable-sidebar-btn ${isActive ? 'cable-sidebar-btn-active' : ''}`}
+                          >
+                            <span>{prod.name}</span>
+                          </button>
+                        )}
+
+                        {/* Render nested subcategories if expanded */}
+                        {hasSub && isExpanded && (
+                          <div className="cable-sidebar-sub-list">
+                            {prod.subCategories.map((sub, sIdx) => {
+                              const isSubActive = activeSubId === sub.id;
+                              return (
+                                <button
+                                  key={sub.id || sIdx}
+                                  onClick={() => handleSubCategoryClick(prod, sub.id)}
+                                  className={`cable-sidebar-sub-btn ${isSubActive ? 'cable-sidebar-sub-btn-active' : ''}`}
+                                >
+                                  {sub.name}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </nav>
+              </aside>
+
+              {/* Details Content */}
+              <main className="cable-detail-main-content" ref={contentRef}>
+                {renderProductDetails(activeProduct)}
+              </main>
+            </div>
           ) : (
-            <>
-              <a href="#" onClick={(e) => { e.preventDefault(); setActiveProduct(null); navigate('/cable'); }}>Cable</a>
-              <span className="separator">/</span>
-              <span className="active-crumb">{activeProduct.name}</span>
-            </>
+            <main className="w-full min-w-0" ref={contentRef}>
+              <div>
+                <div className="products-header-section flex flex-col md:flex-row md:items-center md:justify-between border-b border-gray-100 pb-6 gap-6">
+                  <div>
+                    <h2 className="all-products-title section-title split-heading text-3xl lg:text-4xl mb-0 !text-[#203a70]">
+                      All Cables
+                    </h2>
+                  </div>
+
+                  {/* Premium Search Bar */}
+                  <div className="custom-search-container relative mt-2 md:mt-0 w-full md:w-96">
+                    <input
+                      type="text"
+                      placeholder="Search cables..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="custom-search-input w-full"
+                    />
+                    <svg className="custom-search-icon absolute top-1/2 transform -translate-y-1/2 cursor-pointer" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                {(() => {
+                  const items = products.filter(item =>
+                    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+                  );
+
+                  if (items.length === 0) {
+                    return (
+                      <div className="no-products-section text-center py-20">
+                        <p className="text-[#203a70] text-xl font-semibold mb-2">No cables found matching "{searchQuery}"</p>
+                        <p className="text-gray-500 text-sm">Try checking your spelling or searching for another query.</p>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 product-grid-wrapper max-w-7xl mx-auto px-4 md:px-8 pb-20">
+                      {items.map((item, idx) => (
+                        <div
+                          key={item.id}
+                          onClick={() => handleProductClick(item)}
+                          className="stagger-card group cursor-pointer flex flex-col items-start text-left animate-fade-in-up opacity-0"
+                          style={{ animationDelay: `${idx * 0.1}s`, animationFillMode: 'forwards' }}
+                        >
+                          <div className="product-card-img-container rounded-2xl overflow-hidden relative transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-xl w-full mb-5 border border-gray-100">
+                            {item.imgList && item.imgList.length > 0 && item.imgList[0]?.img ? (
+                              <img
+                                src={item.imgList[0].img}
+                                alt={item.name}
+                                className="product-card-img transition-transform duration-500 group-hover:scale-105"
+                              />
+                            ) : (
+                              <Zap className="text-gray-300 w-16 h-16" />
+                            )}
+                            <div className="absolute bottom-0 left-0 w-full pointer-events-none product-card-img-gradient"></div>
+                          </div>
+
+                          <h3 className="product-card-title text-[15px] font-bold text-[#203a70] tracking-wide leading-snug">{item.name}</h3>
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })()}
+              </div>
+            </main>
           )}
         </div>
       </div>
 
-      <div className={`${activeProduct ? 'cable-detail-page-container' : 'cable-page-container'} flex flex-col gap-12 transition-all duration-500`}>
-        {activeProduct ? (
-          <div className="cable-detail-layout-grid">
-            {/* Left Sidebar */}
-            <aside className="cable-detail-sidebar">
-              <nav className="space-y-1">
-                {products.map((prod) => {
-                  const isActive = activeProduct && (activeProduct.id === prod.id || activeProduct.slug === prod.id);
-                  const hasSub = prod.subCategories && prod.subCategories.length > 0;
-                  const isExpanded = expandedCategoryId === prod.id;
-                  
-                  return (
-                    <div key={prod.id} className="cable-sidebar-item-container">
-                      {hasSub ? (
-                        <button
-                          onClick={() => setExpandedCategoryId(prev => prev === prod.id ? null : prod.id)}
-                          className={`cable-sidebar-btn ${isActive ? 'cable-sidebar-btn-active' : ''}`}
-                        >
-                          <span>{prod.name}</span>
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => handleProductClick(prod)}
-                          className={`cable-sidebar-btn ${isActive ? 'cable-sidebar-btn-active' : ''}`}
-                        >
-                          <span>{prod.name}</span>
-                        </button>
-                      )}
-                      
-                      {/* Render nested subcategories if expanded */}
-                      {hasSub && isExpanded && (
-                        <div className="cable-sidebar-sub-list">
-                          {prod.subCategories.map((sub, sIdx) => {
-                            const isSubActive = activeSubId === sub.id;
-                            return (
-                              <button
-                                key={sub.id || sIdx}
-                                onClick={() => handleSubCategoryClick(prod, sub.id)}
-                                className={`cable-sidebar-sub-btn ${isSubActive ? 'cable-sidebar-sub-btn-active' : ''}`}
-                              >
-                                {sub.name}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </nav>
-            </aside>
-            
-            {/* Details Content */}
-            <main className="cable-detail-main-content" ref={contentRef}>
-              {renderProductDetails(activeProduct)}
-            </main>
-          </div>
-        ) : (
-          <main className="w-full min-w-0" ref={contentRef}>
-            <div>
-              <div className="products-header-section flex flex-col md:flex-row md:items-center md:justify-between border-b border-gray-100 pb-6 gap-6">
-                <div>
-                  <h2 className="all-products-title section-title split-heading text-3xl lg:text-4xl mb-0 !text-[#203a70]">
-                    All Cables
-                  </h2>
-                </div>
-
-                {/* Premium Search Bar */}
-                <div className="custom-search-container relative mt-2 md:mt-0 w-full md:w-96">
-                  <input
-                    type="text"
-                    placeholder="Search cables..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="custom-search-input w-full"
-                  />
-                  <svg className="custom-search-icon absolute top-1/2 transform -translate-y-1/2 cursor-pointer" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                  </svg>
-                </div>
-              </div>
-
-              {(() => {
-                const items = products.filter(item =>
-                  item.name.toLowerCase().includes(searchQuery.toLowerCase())
-                );
-
-                if (items.length === 0) {
-                  return (
-                    <div className="no-products-section text-center py-20">
-                      <p className="text-[#203a70] text-xl font-semibold mb-2">No cables found matching "{searchQuery}"</p>
-                      <p className="text-gray-500 text-sm">Try checking your spelling or searching for another query.</p>
-                    </div>
-                  );
-                }
-
-                return (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 product-grid-wrapper max-w-7xl mx-auto px-4 md:px-8 pb-20">
-                    {items.map((item, idx) => (
-                      <div
-                        key={item.id}
-                        onClick={() => handleProductClick(item)}
-                        className="stagger-card group cursor-pointer flex flex-col items-start text-left animate-fade-in-up opacity-0"
-                        style={{ animationDelay: `${idx * 0.1}s`, animationFillMode: 'forwards' }}
-                      >
-                        <div className="product-card-img-container rounded-2xl overflow-hidden relative transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-xl w-full mb-5 border border-gray-100">
-                          {item.imgList && item.imgList.length > 0 && item.imgList[0]?.img ? (
-                            <img
-                              src={item.imgList[0].img}
-                              alt={item.name}
-                              className="product-card-img transition-transform duration-500 group-hover:scale-105"
-                            />
-                          ) : (
-                            <Zap className="text-gray-300 w-16 h-16" />
-                          )}
-                          <div className="absolute bottom-0 left-0 w-full pointer-events-none product-card-img-gradient"></div>
-                        </div>
-
-                        <h3 className="product-card-title text-[15px] font-bold text-[#203a70] tracking-wide leading-snug">{item.name}</h3>
-                        </div>
-                    ))}
-                  </div>
-                );
-              })()}
-            </div>
-          </main>
-        )}
-      </div>
-      </div>
-
       {/* Lightbox Modal */}
       {selectedGalleryIndex !== null && activeProduct && (
-        <div 
+        <div
           className="fixed inset-0 flex items-center justify-center bg-black/90 transition-opacity animate-fade-in"
           onClick={() => setSelectedGalleryIndex(null)}
           style={{ zIndex: 99999 }}
         >
           <div className="relative max-w-6xl w-full h-full flex items-center justify-center p-4 md:p-10">
-            <button 
+            <button
               className="absolute top-6 right-6 md:top-8 md:right-8 text-white hover:text-gray-200 bg-gray-800/80 hover:bg-gray-700 rounded-full w-12 h-12 flex items-center justify-center shadow-xl z-[100000] transition-all duration-300 hover:scale-110"
               onClick={(e) => { e.stopPropagation(); setSelectedGalleryIndex(null); }}
             >
@@ -686,22 +739,22 @@ const Products = () => {
             {/* Slider Navigation */}
             {activeProduct.imgList && activeProduct.imgList.slice(3).filter(imgObj => imgObj && imgObj.img).length > 1 && (
               <>
-                <button 
+                <button
                   className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white hover:text-gray-200 bg-gray-800/80 hover:bg-gray-700 rounded-full w-12 h-12 flex items-center justify-center shadow-xl z-[100000] transition-all duration-300 hover:scale-110"
-                  onClick={(e) => { 
-                    e.stopPropagation(); 
+                  onClick={(e) => {
+                    e.stopPropagation();
                     const gallery = activeProduct.imgList.slice(3).filter(imgObj => imgObj && imgObj.img);
-                    setSelectedGalleryIndex((prev) => prev === 0 ? gallery.length - 1 : prev - 1); 
+                    setSelectedGalleryIndex((prev) => prev === 0 ? gallery.length - 1 : prev - 1);
                   }}
                 >
                   <ArrowLeft size={24} strokeWidth={2.5} />
                 </button>
-                <button 
+                <button
                   className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white hover:text-gray-200 bg-gray-800/80 hover:bg-gray-700 rounded-full w-12 h-12 flex items-center justify-center shadow-xl z-[100000] transition-all duration-300 hover:scale-110"
-                  onClick={(e) => { 
-                    e.stopPropagation(); 
+                  onClick={(e) => {
+                    e.stopPropagation();
                     const gallery = activeProduct.imgList.slice(3).filter(imgObj => imgObj && imgObj.img);
-                    setSelectedGalleryIndex((prev) => prev === gallery.length - 1 ? 0 : prev + 1); 
+                    setSelectedGalleryIndex((prev) => prev === gallery.length - 1 ? 0 : prev + 1);
                   }}
                 >
                   <ArrowRight size={24} strokeWidth={2.5} />
@@ -709,12 +762,12 @@ const Products = () => {
               </>
             )}
 
-            <img 
+            <img
               key={selectedGalleryIndex}
-              src={activeProduct.imgList.slice(3).filter(imgObj => imgObj && imgObj.img)[selectedGalleryIndex]?.img} 
-              alt="Gallery Full Size" 
-              className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl animate-fade-in" 
-              onClick={(e) => e.stopPropagation()} 
+              src={activeProduct.imgList.slice(3).filter(imgObj => imgObj && imgObj.img)[selectedGalleryIndex]?.img}
+              alt="Gallery Full Size"
+              className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl animate-fade-in"
+              onClick={(e) => e.stopPropagation()}
             />
           </div>
         </div>

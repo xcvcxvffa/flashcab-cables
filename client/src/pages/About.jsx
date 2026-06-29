@@ -221,25 +221,25 @@ const About = () => {
     diagTl.from(".industries-center-logo-wrap", {
       scale: 0.5,
       opacity: 0,
-      duration: 0.8,
+      duration: 0.4,
       ease: "back.out(1.5)"
     })
       .from(".industries-diagram-container svg path, .industries-diagram-container svg line", {
         opacity: 0,
-        stagger: 0.05,
-        duration: 0.5,
+        stagger: 0.02,
+        duration: 0.3,
         ease: "power2.out"
-      }, "-=0.4")
+      }, "-=0.2")
       // Safe animation: target the inner elements so their absolute coordinates are preserved
       .fromTo(".industries-node-icon",
         { scale: 0, opacity: 0, xPercent: -50, yPercent: -50 },
-        { scale: 1, opacity: 1, xPercent: -50, yPercent: -50, stagger: 0.02, duration: 0.2, ease: "back.out(1.2)" }
+        { scale: 1, opacity: 1, xPercent: -50, yPercent: -50, stagger: 0.02, duration: 0.3, ease: "back.out(1.2)" }
         , "-=0.2")
       .from(".industries-node-text", {
         x: (index, target) => target.classList.contains("left") ? 20 : -20,
         opacity: 0,
         stagger: 0.02,
-        duration: 0.2,
+        duration: 0.3,
         ease: "power3.out"
       }, "<0.02");
 

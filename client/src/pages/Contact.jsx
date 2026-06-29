@@ -243,10 +243,16 @@ const Contact = () => {
                     ></textarea>
                   </div>
 
-                  <button type="submit" className="contact-submit-btn group">
-                    <div className="solax-btn-dot"></div>
-                    <span>Send Message</span>
-                    <ArrowRight size={18} className="contact-btn-arrow" />
+                  <button type="submit" className="btn-uiverse group" style={{ marginTop: '10px' }}>
+                    <span className="flex items-center gap-2.5">
+                      Send Message
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 ease-out group-hover:translate-x-1 shrink-0 self-center">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M5 12l14 0" />
+                        <path d="M15 16l4 -4" />
+                        <path d="M15 8l4 4" />
+                      </svg>
+                    </span>
                   </button>
                   {status && <p className="contact-status-msg">{status}</p>}
                 </form>
