@@ -41,12 +41,12 @@ export const productCategories = [
             <table class="dark-spec-table w-full min-w-[800px]">
               <thead>
                 <tr>
-                  <th rowspan="2">Wire Size</th>
-                  <th rowspan="2">No. of wire / Size<br/>of Wire</th>
-                  <th rowspan="2">Insulation<br/>Thickness<br/>(Nominal)</th>
-                  <th rowspan="2">OD</th>
-                  <th rowspan="2">Max Conductor Resistance<br/>at 20°C</th>
-                  <th rowspan="2">Current Rating</th>
+                  <th>Wire Size</th>
+                  <th>No. of wire / Size<br/>of Wire</th>
+                  <th>Insulation<br/>Thickness<br/>(Nominal)</th>
+                  <th>OD</th>
+                  <th>Max Conductor Resistance<br/>at 20°C</th>
+                  <th>Current Rating</th>
                 </tr>
                 <tr class="sub-header-row">
                   <th>sq.mm</th>
