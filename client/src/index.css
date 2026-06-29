@@ -4466,7 +4466,23 @@ section.why-flashcab-section .premium-about-desc {
 @media (min-width: 1024px) {
   .cable-detail-sidebar {
     width: 310px;
-    /* Standardize sidebar width with nice visual space */
+    position: sticky;
+    top: 120px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    /* Hide scrollbar for cleaner look */
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+  }
+  .cable-detail-sidebar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .cable-detail-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .cable-detail-sidebar::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 10px;
   }
 }
 
