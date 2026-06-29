@@ -46,6 +46,7 @@ const mapStaticProduct = (prod) => {
     specs: prod.specs || {},
     technicalDetails: technicalDetails,
     features: features,
+    applicationHtml: prod.specs?.applicationHtml || '',
     specificationHtml: tableHtml || prod.specs?.specificationHtml || '',
     specificationTable: prod.specs?.specificationTable || null,
     tableNotes: prod.specs?.tableNotes || [],
@@ -451,6 +452,19 @@ const Products = () => {
             )}
           </div>
         </div>
+
+                {/* Detailed Application HTML */}
+        {displayProduct.applicationHtml && (
+          <div className="detail-section-card spec-table mt-12 overflow-x-auto">
+            <div className="table-heading-container">
+              <span className="table-heading-bar"></span>
+              <h3 className="table-heading-text">Application of MVCC</h3>
+            </div>
+            <div className="overflow-x-auto spec-html-container">
+              <div dangerouslySetInnerHTML={{ __html: displayProduct.applicationHtml }} />
+            </div>
+          </div>
+        )}
 
         {/* Dynamic Table Grid */}
         {displayProduct.specificationTable ? (
