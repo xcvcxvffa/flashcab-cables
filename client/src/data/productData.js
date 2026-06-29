@@ -390,10 +390,10 @@ export const productCategories = [
   {
     id: 'mvcc',
     name: 'Medium Voltage Covered Conductor (MVCC)',
-    image: '/assets/images/Product_Image/mvcc.png',
-    image2: '/assets/images/Product_Image/mvcc.png',
+    image: '/assets/images/Product_Image/Medium Voltage Covered Conductor (MVCC).png',
+    image2: '/assets/images/Product_Image/Medium Voltage Covered Conductor (MVCC).png',
     imgList: [
-      { img: '/assets/images/Product_Image/mvcc.png' }
+      { img: '/assets/images/Product_Image/Medium Voltage Covered Conductor (MVCC).png' }
     ],
     subCategories: [],
     specs: {
