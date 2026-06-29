@@ -388,7 +388,7 @@ const Products = () => {
                   {Object.entries(specs.construction).map(([key, value]) => (
                     <div key={key} className="standard-packing-item">
                       <span className="standard-packing-label">{key}</span>
-                      <span className="standard-packing-value">{value}</span>
+                      <span className="standard-packing-value" dangerouslySetInnerHTML={{ __html: value }} />
                     </div>
                   ))}
                 </div>
@@ -402,7 +402,7 @@ const Products = () => {
                   {Object.entries(specs.standardPacking).map(([key, value]) => (
                     <div key={key} className="standard-packing-item">
                       <span className="standard-packing-label">{key}</span>
-                      <span className="standard-packing-value">{value}</span>
+                      <span className="standard-packing-value" dangerouslySetInnerHTML={{ __html: value }} />
                     </div>
                   ))}
                 </div>

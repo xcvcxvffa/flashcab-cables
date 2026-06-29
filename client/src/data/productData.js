@@ -207,7 +207,7 @@ export const productCategories = [
         ],
         rows: [
           ['1.5', '13.7', '0.60', '0.70', '4.30', '22', '0.189'],
-          ['2.5', '8.71', '0.70', '0.80', '5.0', '30', '0.315'],
+          ['2.5', '8.21', '0.70', '0.80', '5.0', '30', '0.315'],
           ['4.0', '5.09', '0.70', '0.80', '5.60', '42', '0.504'],
           ['6.0', '3.39', '0.80', '0.90', '6.20', '52', '0.756'],
           ['10.0', '1.95', '0.80', '0.90', '7.10', '76', '1.26'],
@@ -281,6 +281,11 @@ export const productCategories = [
     subCategories: [],
     specs: {
       cableStandard: 'IS 14255:1995',
+      construction: {
+        'Phase conductor': '<ul class="list-disc pl-5"><li>Stranded Circular or compacted aluminium Class-2 conductor to IS 8130</li><li>XLPE (Cross linked polyethylene) Insulation</li></ul>',
+        'Messenger conductor': '<ul class="list-disc pl-5"><li>Stranded circular or compacted heat-treated aluminium-magnesium alloy wire to IS 398 (part 4)</li></ul>',
+        'Streetlight conductor': '<ul class="list-disc pl-5"><li>Stranded aluminium conductor Class-2 to IS 8130</li><li>XLPE (Cross linked polyethylene) Insulation</li></ul>'
+      },
       salientFeatures: [
         'Stranded Compact Aluminium Conductor',
         'High-density Polyethylene (HDPE) or XLPE Insulation',
@@ -295,37 +300,8 @@ export const productCategories = [
         'Temperature Range': '-15°C to +90°C',
         'Application': 'Overhead distribution power transmission'
       },
-      standardPacking: {
-        'Conductor': 'Stranded Compact Aluminium (Class 2)',
-        'Insulation': 'XLPE / Weather Resistant HDPE',
-        'Messenger Wire': 'Standard Aluminium Alloy (Stranded)',
-        'Core Identification': 'By longitudinal ribs'
-      },
       coreColour: 'Black (UV Resistant Insulation) with Ribs.',
-      application: 'Aerial Bunched Cables (ABC) are designed for safe and reliable overhead power distribution. Their insulated bundled construction minimizes power theft, short circuits, and environmental damage while ensuring reduced maintenance and enhanced operational safety. Ideal for urban, rural, and residential electrification projects.',
-      specificationTable: {
-        headerRows: [
-          [
-            'Size of Phase Conductor (sq.mm)',
-            'Insulation Thickness (mm)',
-            'Messenger Wire Size (sq.mm)',
-            'Approx Overall Bundle OD (mm)',
-            'Max Conductor Resistance (Ω/km)',
-            'Current Rating in Air (Amps)'
-          ]
-        ],
-        rows: [
-          ['16.0', '1.2', '25.0', '15.5', '1.91', '60'],
-          ['25.0', '1.2', '25.0', '17.8', '1.20', '80'],
-          ['35.0', '1.2', '35.0', '19.5', '0.868', '100'],
-          ['50.0', '1.5', '50.0', '22.8', '0.641', '120'],
-          ['70.0', '1.5', '50.0', '25.5', '0.443', '150'],
-          ['95.0', '1.5', '70.0', '28.8', '0.320', '185']
-        ]
-      },
-      tableNotes: [
-        'Tested under overhead bundle distribution specifications.'
-      ]
+      application: 'Aerial Bunched Cables (ABC) are designed for safe and reliable overhead power distribution. Their insulated bundled construction minimizes power theft, short circuits, and environmental damage while ensuring reduced maintenance and enhanced operational safety. Ideal for urban, rural, and residential electrification projects.'
     }
   },
   {
