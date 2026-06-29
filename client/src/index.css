@@ -4467,8 +4467,8 @@ section.why-flashcab-section .premium-about-desc {
   .cable-detail-sidebar {
     width: 310px;
     position: sticky;
-    top: 30px;
-    max-height: calc(100vh - 60px);
+    top: 110px;
+    max-height: calc(100vh - 140px);
     overflow-y: auto;
     /* Hide scrollbar for cleaner look */
     scrollbar-width: thin;
