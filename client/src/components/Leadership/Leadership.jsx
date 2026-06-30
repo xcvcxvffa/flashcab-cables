@@ -13,9 +13,9 @@ const leaders = [
   {
     id: 1,
     name: 'Gopalbhai Shingala',
-    role: 'Chairman',
-    image: '/assets/images/Team/Gopalbhai_Shingala.png',
-    linkedin: '#', // Icon added
+    role: '',
+    image: placeholderSvg,
+    linkedin: '#',
     description: ""
   },
   {
@@ -59,7 +59,7 @@ const Leadership = () => {
         stagger: 0.2,
         ease: 'power3.out',
         scrollTrigger: {
-          trigger: '.leadership-section',
+          trigger: containerRef.current,
           start: 'top 80%',
         }
       }

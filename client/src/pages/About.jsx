@@ -11,6 +11,9 @@ import {
   Calendar, MapPin, Network, FlaskConical, ClipboardCheck, Timer, Headset
 } from 'lucide-react';
 import SideRays from '../components/SideRays/SideRays';
+import SEO from '../components/SEO/SEO';
+import Schema from '../components/SEO/Schema';
+import { buildAboutPageSchema, buildBreadcrumbSchema } from '../utils/schemaBuilders';
 import '../stars.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -393,6 +396,24 @@ const About = () => {
 
   return (
     <div ref={containerRef} className="about-page-wrapper bg-[#F8F9FB] text-[#111111] overflow-hidden font-sans">
+      <SEO 
+        title="About Us - Flashcab Cables"
+        description="Learn about Flashcab Cables, our history, mission, and commitment to providing top-quality electrical solutions and empowering connectivity."
+        url="/about"
+      />
+      <Schema 
+        schemaData={[
+          buildAboutPageSchema({
+            name: "About Flashcab Cables",
+            description: "Learn about Flashcab Cables, our history, mission, and commitment to providing top-quality electrical solutions.",
+            url: "/about"
+          }),
+          buildBreadcrumbSchema([
+            { name: "Home", url: "/" },
+            { name: "About Us", url: "/about" }
+          ])
+        ]}
+      />
 
       {/* Page Header (Theme Breadcrumb) */}
       <div className="breadcrumb-hero pt-24" style={{ backgroundImage: "url('/assets/images/team_working.png')" }}>

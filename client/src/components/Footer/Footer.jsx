@@ -102,8 +102,6 @@ const Footer = () => {
           </p>
           <div className="footer-bottom-links">
             <Link to="/cookie-policy">Cookie Policy</Link>
-            <a href="#">Terms of Use</a>
-            <a href="#">Refund Policy</a>
           </div>
         </div>
       </div>

@@ -6,6 +6,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, ArrowLeft, Zap, CheckCircle2, ShieldCheck, Settings2, Package, Maximize2, X } from 'lucide-react';
 import Preloader from '../components/Preloader/Preloader';
 import usePageSEO from '../hooks/usePageSEO';
+import SEO from '../components/SEO/SEO';
+import Schema from '../components/SEO/Schema';
+import { buildProductSchema, buildWebPageSchema, buildBreadcrumbSchema } from '../utils/schemaBuilders';
 import { productCategories } from '../data/productData';
 
 const mapStaticProduct = (prod) => {
@@ -88,7 +91,13 @@ const Products = () => {
 
   useEffect(() => {
     fetch('/api/products')
-      .then(res => res.json())
+      .then(res => {
+        const contentType = res.headers.get("content-type");
+        if (!res.ok || !contentType || !contentType.includes("application/json")) {
+          throw new Error("API unavailable");
+        }
+        return res.json();
+      })
       .then(data => {
         const rawFetchedProducts = data.data || [];
         const validStaticIds = productCategories.map(p => p.id);
@@ -189,7 +198,7 @@ const Products = () => {
       gsap.fromTo(
         sidebarRef.current,
         { opacity: 0, x: -30 },
-        { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" }
+        { opacity: 1, x: 0, duration: 0.8, ease: "power3.out", clearProps: "all" }
       );
     }
   }, [activeProduct]);
@@ -197,37 +206,45 @@ const Products = () => {
   // Detail View Animations
   useGSAP(() => {
     if (activeProduct && detailRef.current) {
-      gsap.fromTo('.detail-hero-text',
-        { opacity: 0, x: -30 },
-        { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" }
-      );
+      if (document.querySelector('.detail-hero-text')) {
+        gsap.fromTo('.detail-hero-text',
+          { opacity: 0, x: -30 },
+          { opacity: 1, x: 0, duration: 0.8, ease: "power3.out", clearProps: "all" }
+        );
+      }
 
-      gsap.fromTo('.bento-box',
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1, y: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: '.bento-grid',
-            start: "top 85%"
+      if (document.querySelector('.bento-box')) {
+        gsap.fromTo('.bento-box',
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1, y: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: "power3.out",
+            clearProps: "all",
+            scrollTrigger: {
+              trigger: '.bento-grid',
+              start: "top 85%"
+            }
           }
-        }
-      );
+        );
+      }
 
-      gsap.fromTo('.spec-table',
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1, y: 0,
-          duration: 0.8,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: '.spec-table',
-            start: "top 90%"
+      if (document.querySelector('.spec-table')) {
+        gsap.fromTo('.spec-table',
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1, y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            clearProps: "all",
+            scrollTrigger: {
+              trigger: '.spec-table',
+              start: "top 90%"
+            }
           }
-        }
-      );
+        );
+      }
     }
   }, [activeProduct]);
 
@@ -455,12 +472,12 @@ const Products = () => {
 
                 {/* Detailed Application HTML */}
         {displayProduct.applicationHtml && (
-          <div className="detail-section-card spec-table mt-12 overflow-x-auto">
-            <div className="table-heading-container">
-              <span className="table-heading-bar"></span>
-              <h3 className="table-heading-text">Application of MVCC</h3>
+          <div className="mt-12 w-full">
+            <div className="flex items-center gap-3 mb-8">
+              <span className="w-1.5 h-6 bg-[#1f6f5f] rounded-full flex-shrink-0"></span>
+              <h3 className="m-0 p-0 tracking-tight" style={{ fontSize: '1.5rem', fontWeight: '600', color: '#203a70' }}>Application of MVCC</h3>
             </div>
-            <div className="overflow-x-auto spec-html-container">
+            <div className="w-full spec-html-container">
               <div dangerouslySetInnerHTML={{ __html: displayProduct.applicationHtml }} />
             </div>
           </div>
@@ -571,6 +588,31 @@ const Products = () => {
 
   return (
     <>
+      <SEO 
+        title={activeProduct ? `${activeProduct.name} - Flashcab Cables` : "Our Products - Flashcab Cables"}
+        description={activeProduct ? activeProduct.description : "Explore our range of high-performance cables and wires."}
+        url={activeProduct ? `/cable/${activeProduct.slug}` : "/cable"}
+      />
+      <Schema 
+        schemaData={[
+          activeProduct 
+            ? buildProductSchema({
+                name: activeProduct.name,
+                description: activeProduct.description,
+                image: activeProduct.imgList?.[0]?.img ? `https://flashcabcables.com${activeProduct.imgList[0].img}` : undefined
+              })
+            : buildWebPageSchema({
+                name: "Flashcab Products",
+                description: "High-performance electrical cables and wires.",
+                url: "/cable"
+              }),
+          buildBreadcrumbSchema([
+            { name: "Home", url: "/" },
+            { name: "Products", url: "/cable" },
+            ...(activeProduct ? [{ name: activeProduct.name, url: `/cable/${activeProduct.slug}` }] : [])
+          ])
+        ]}
+      />
       {showPreloader && <Preloader onComplete={() => setShowPreloader(false)} />}
       <div className="min-h-screen bg-white pt-24 pb-20">
         {/* Dynamic Breadcrumb Section */}

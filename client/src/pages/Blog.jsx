@@ -4,7 +4,9 @@ import gsap from 'gsap';
 import { ArrowRight, Calendar, Tag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { blogPosts } from '../data/blogData';
-
+import SEO from '../components/SEO/SEO';
+import Schema from '../components/SEO/Schema';
+import { buildWebPageSchema, buildBreadcrumbSchema } from '../utils/schemaBuilders';
 const Blog = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [displayedPosts, setDisplayedPosts] = useState([]);
@@ -116,6 +118,24 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen bg-white pt-24 pb-20">
+      <SEO 
+        title={activeCategory === 'All' ? "Blog & News - Flashcab Cables" : `${activeCategory} News - Flashcab Cables`}
+        description="Stay updated with the latest news, insights, and updates from Flashcab Cables on electrical solutions and industry trends."
+        url="/blog"
+      />
+      <Schema 
+        schemaData={[
+          buildWebPageSchema({
+            name: activeCategory === 'All' ? "Blog & News - Flashcab Cables" : `${activeCategory} News - Flashcab Cables`,
+            description: "Stay updated with the latest news, insights, and updates from Flashcab Cables.",
+            url: "/blog"
+          }),
+          buildBreadcrumbSchema([
+            { name: "Home", url: "/" },
+            { name: "Blog", url: "/blog" }
+          ])
+        ]}
+      />
       {/* Dynamic Breadcrumb Section */}
       <div className="breadcrumb-hero" style={{ backgroundImage: "url('/assets/images/impact_bg.png')" }}>
          <h1 className="breadcrumb-title">

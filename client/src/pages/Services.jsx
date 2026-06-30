@@ -1,10 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Wrench, ArrowRight } from 'lucide-react';
+import SEO from '../components/SEO/SEO';
+import Schema from '../components/SEO/Schema';
+import { buildWebPageSchema, buildBreadcrumbSchema } from '../utils/schemaBuilders';
 
 const Services = () => {
   return (
     <div className="coming-soon-page">
+      <SEO 
+        title="Our Services - Flashcab Cables"
+        description="Flashcab Cables EPC services. We are crafting something amazing for you."
+        url="/services"
+      />
+      <Schema 
+        schemaData={[
+          buildWebPageSchema({
+            name: "Services",
+            description: "Flashcab Cables EPC services coming soon.",
+            url: "/services"
+          }),
+          buildBreadcrumbSchema([
+            { name: "Home", url: "/" },
+            { name: "Services", url: "/services" }
+          ])
+        ]}
+      />
       <div className="coming-soon-container">
         {/* Animated Icon */}
         <div className="coming-soon-icon-wrapper">

@@ -5,8 +5,14 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion, useInView } from 'framer-motion';
 import { Zap, Star, Globe, ArrowRight, ShieldCheck, Leaf, Cpu } from 'lucide-react';
 import Leadership from '../components/Leadership/Leadership';
-
-
+import SEO from '../components/SEO/SEO';
+import Schema from '../components/SEO/Schema';
+import {
+    buildOrganizationSchema,
+    buildWebSiteSchema,
+    buildWebPageSchema,
+    buildLocalBusinessSchema
+} from '../utils/schemaBuilders';
 gsap.registerPlugin(ScrollTrigger);
 
 const AnimatedNumber = ({ target }) => {
@@ -401,13 +407,30 @@ const Home = () => {
 
     return (
         <div ref={container}>
+            <SEO
+                title="Premium Cables & Wires Manufacturer"
+                description="Flashcab Cables is a leading manufacturer of premium wires and cables. We deliver high-quality, reliable, and sustainable power solutions for industries and homes."
+                url="/"
+            />
+            <Schema
+                schemaData={[
+                    buildOrganizationSchema(),
+                    buildWebSiteSchema(),
+                    buildLocalBusinessSchema(),
+                    buildWebPageSchema({
+                        name: "Flashcab Cables Home",
+                        description: "Flashcab Cables is a leading manufacturer of premium wires and cables.",
+                        url: "/"
+                    })
+                ]}
+            />
             {/* 1. Dark Hero Section */}
             <section className="dark-hero">
-                <video 
-                    autoPlay 
-                    loop 
-                    muted 
-                    playsInline 
+                <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
                     className="hero-background-video"
                     style={{
                         position: 'absolute',
@@ -473,15 +496,15 @@ const Home = () => {
                                         <i className="fa-solid fa-map-location-dot"></i>
                                     </div>
                                     <div style={{ fontSize: '42px', fontWeight: 800, color: 'var(--secondary-color)', fontFamily: 'var(--font-heading)', lineHeight: 1, marginBottom: '8px' }}>20+</div>
-                                    <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '1px' }}>States Available In</div>
+                                    <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '1px' }}>Available in States</div>
                                 </div>
 
                                 <div className="bento-stat-card">
                                     <div className="bento-stat-icon">
                                         <i className="fa-solid fa-network-wired"></i>
                                     </div>
-                                    <div style={{ fontSize: '42px', fontWeight: 800, color: 'var(--secondary-color)', fontFamily: 'var(--font-heading)', lineHeight: 1, marginBottom: '8px' }}>35k+</div>
-                                    <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '1px' }}>Power Transmission Network</div>
+                                    <div style={{ fontSize: '42px', fontWeight: 800, color: 'var(--secondary-color)', fontFamily: 'var(--font-heading)', lineHeight: 1, marginBottom: '8px' }}>35000+</div>
+                                    <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '1px' }}>kms, transmitting power through cables</div>
                                 </div>
                             </div>
 
@@ -559,14 +582,14 @@ const Home = () => {
                         We build our medium voltage, extra-high voltage, and solar cables to stand up to the toughest environments. Designed for real-world reliability, they ensure your power keeps flowing smoothly and safely, day in and day out.
                     </p>
 
-                    <div className="products-stats">
+                    <div className="products-stats" style={{ display: 'none' }}>
                         <div className="stat-item">
                             <span className="stat-label">VOLTAGE RANGE (KV)</span>
                             <span className="stat-value">6.6 - 220</span>
                         </div>
                         <div className="stat-item">
                             <span className="stat-label">MAX CABLE SIZE (SQMM)</span>
-                            <span className="stat-value">2500</span>
+                            <span className="stat-value">1000</span>
                         </div>
                         <div className="stat-item">
                             <span className="stat-label">DESIGN OPTIONS</span>
@@ -746,19 +769,21 @@ const Home = () => {
                                             margin: '-1px'
                                         }}>
                                     </div>
-                                    <div className="flex justify-between items-start w-full gap-4 relative z-10">
-                                        <p className="text-gray-300 font-medium text-base text-left leading-relaxed max-w-[220px]" style={{ fontFamily: 'var(--font-body)' }}>
-                                            Stringent end-to-end testing ensuring unmatched reliability for critical infrastructure.
-                                        </p>
-                                        <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+
+                                    <div className="flex justify-between items-start w-full gap-3 md:gap-4 relative z-10">
+                                        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white text-left break-words leading-tight flex-1 pr-2">Unmatched Quality</h3>
+                                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
                                             {/* Animated Icon */}
                                             <motion.div animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.1, 1] }} transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}>
-                                                <ShieldCheck size={24} color="#2fa084" />
+                                                <ShieldCheck className="w-5 h-5 md:w-6 md:h-6" color="#2fa084" />
                                             </motion.div>
                                         </div>
                                     </div>
-                                    <div className="flex items-center justify-start w-full mt-8">
-                                        <h3 className="text-2xl md:text-3xl font-bold text-white">Unmatched Quality</h3>
+
+                                    <div className="relative z-10 w-full mt-6">
+                                        <p className="text-gray-300 font-medium text-sm md:text-base text-left leading-relaxed" style={{ fontFamily: 'var(--font-body)' }}>
+                                            Stringent end-to-end testing ensuring unmatched reliability for critical infrastructure.
+                                        </p>
                                     </div>
                                 </div>
 
@@ -774,19 +799,21 @@ const Home = () => {
                                             margin: '-1px'
                                         }}>
                                     </div>
-                                    <div className="flex justify-between items-start w-full gap-4 relative z-10">
-                                        <p className="text-gray-300 font-medium text-base text-left leading-relaxed max-w-[220px]" style={{ fontFamily: 'var(--font-body)' }}>
-                                            Pioneering sustainable practices with a steadfast zero waste to landfill commitment.
-                                        </p>
-                                        <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+
+                                    <div className="flex justify-between items-start w-full gap-3 md:gap-4 relative z-10">
+                                        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white text-left break-words leading-tight flex-1 pr-2">Eco-Conscious</h3>
+                                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
                                             {/* Animated Icon */}
                                             <motion.div animate={{ rotate: [0, 15, 0], scale: [1, 1.15, 1] }} transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}>
-                                                <Leaf size={24} color="#fcb900" />
+                                                <Leaf className="w-5 h-5 md:w-6 md:h-6" color="#fcb900" />
                                             </motion.div>
                                         </div>
                                     </div>
-                                    <div className="flex items-center justify-start w-full mt-8">
-                                        <h3 className="text-2xl md:text-3xl font-bold text-white">Eco-Conscious</h3>
+
+                                    <div className="relative z-10 w-full mt-6">
+                                        <p className="text-gray-300 font-medium text-sm md:text-base text-left leading-relaxed" style={{ fontFamily: 'var(--font-body)' }}>
+                                            Pioneering sustainable practices with a steadfast zero waste to landfill commitment.
+                                        </p>
                                     </div>
                                 </div>
 
@@ -802,19 +829,21 @@ const Home = () => {
                                             margin: '-1px'
                                         }}>
                                     </div>
-                                    <div className="flex justify-between items-start w-full gap-4 relative z-10">
-                                        <p className="text-gray-300 font-medium text-base text-left leading-relaxed max-w-[220px]" style={{ fontFamily: 'var(--font-body)' }}>
-                                            Developing advanced ACCC technology and smart cables for modern power grids.
-                                        </p>
-                                        <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+
+                                    <div className="flex justify-between items-start w-full gap-3 md:gap-4 relative z-10">
+                                        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white text-left break-words leading-tight flex-1 pr-2">Next-Gen Engineering</h3>
+                                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
                                             {/* Animated Icon */}
                                             <motion.div animate={{ rotate: [0, 5, -5, 0] }} transition={{ repeat: Infinity, duration: 4, ease: "linear" }}>
-                                                <Cpu size={24} color="#0073c0" />
+                                                <Cpu className="w-5 h-5 md:w-6 md:h-6" color="#0073c0" />
                                             </motion.div>
                                         </div>
                                     </div>
-                                    <div className="flex items-center justify-start w-full mt-8">
-                                        <h3 className="text-2xl md:text-3xl font-bold text-white">Next-Gen Engineering</h3>
+
+                                    <div className="relative z-10 w-full mt-6">
+                                        <p className="text-gray-300 font-medium text-sm md:text-base text-left leading-relaxed" style={{ fontFamily: 'var(--font-body)' }}>
+                                            Developing advanced ACCC technology and smart cables for modern power grids.
+                                        </p>
                                     </div>
                                 </div>
 

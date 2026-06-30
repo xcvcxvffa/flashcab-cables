@@ -1,16 +1,20 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
-import Home from './pages/Home';
-import About from './pages/About';
-import Services from './pages/Services';
-import Contact from './pages/Contact';
-import Products from './pages/Products';
-import Blog from './pages/Blog';
 import CookiePolicy from './components/CookieConsent/CookiePolicy';
 import Preloader from './components/Preloader/Preloader';
 import CookieConsent from './components/CookieConsent/CookieConsent';
+
+// Lazy loaded page components for Code Splitting
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Services = lazy(() => import('./pages/Services'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Products = lazy(() => import('./pages/Products'));
+const Blog = lazy(() => import('./pages/Blog'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 function AppContent() {
   const location = useLocation();
@@ -22,16 +26,19 @@ function AppContent() {
       <div className="font-body text-text-light bg-bg-white min-h-screen flex flex-col">
         <Header />
         <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/cable" element={<Products />} />
-            <Route path="/cable/:productId" element={<Products />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/cookie-policy" element={<CookiePolicy />} />
-          </Routes>
+          <Suspense fallback={<div></div>}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/cable" element={<Products />} />
+              <Route path="/cable/:productId" element={<Products />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/cookie-policy" element={<CookiePolicy />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
         </main>
         <Footer />
         <ScrollToTop />

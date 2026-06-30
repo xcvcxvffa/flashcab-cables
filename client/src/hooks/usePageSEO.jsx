@@ -12,6 +12,9 @@ const usePageSEO = (slug) => {
                 const response = await fetch(`/api/page-settings/single.php?id=${slug}&t=${new Date().getTime()}`);
                 if (!response.ok) return;
                 
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) return;
+
                 const json = await response.json();
                 if (json && json.data) {
                     setSettings(json.data);
@@ -42,7 +45,7 @@ const usePageSEO = (slug) => {
                     }
                 }
             } catch (error) {
-                console.error("Failed to fetch SEO data for:", slug);
+                // Silently ignore SEO fetch errors in dev environment
             } finally {
                 setLoading(false);
             }
